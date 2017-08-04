@@ -1,12 +1,11 @@
 module.exports = {
-    requirements: "[*] {math_expression}",
-    //plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent
-    name: "Math.js",
-    version: "0.1.0",
-    OnLoad: function()
-    {
-      this.Info(this.name + " " + this.version + " loaded!");
-    },
+  requirements: "[*] {math_expression}",
+  //plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent
+  name: "Math.js",
+  version: "0.1.0",
+  OnLoad: function() {
+    this.Info(this.name + " " + this.version + " loaded!");
+  },
 
     run: function(input, request)
     {
@@ -88,7 +87,7 @@ module.exports = {
 
       var response = "Sorry, I didn't get that.";
 
-      var data = input.entities.math_expression[0].value;
+    var data = input.entities.math_expression[0].value;
 
       data = data.split(" ");
       var retData = "";
@@ -114,6 +113,9 @@ module.exports = {
 
       response = math.eval(data);
 
-      return response;
-    }
+
+    response = math.eval(data);
+
+    return response;
+  }
 }

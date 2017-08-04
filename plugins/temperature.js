@@ -2,9 +2,8 @@ module.exports = {
     requirements: "[temperature, hot, cold, temp] {datetime}",
     name: "Temperature",
     version: "0.2.0",
-    OnLoad: function()
-    {
-      this.Info(this.name + " " + this.version + " loaded!");
+    OnLoad: function() {
+        this.Info(this.name + " " + this.version + " loaded!");
     },
 
     run: function(input, request) {
