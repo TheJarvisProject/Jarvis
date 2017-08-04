@@ -54,25 +54,34 @@ var logger = {
             console.log(chalk.bgRed("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold.underline(message)));
         }
     }
+  },
+  Debug: function(message)
+  {
+    if(this.name !== null && this.name !== undefined)
+    {
+      console.log(chalk.bgGreen("["+chalk.blue(this.name)+"] " + chalk.blue(message)));
+    } else {
+      console.log(chalk.bgGreen("["+chalk.blue("Jarvis")+"] " + chalk.blue(message)));
+    }
+  }
 };
-
-logger.Info("Just some info!");
-logger.Warning("Uh oh somethings wrong!");
-logger.Error("MAYDAY MAYDAY WE'RE SINKING!");
 
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
 
     modules[file.replace(".js", "")] = require("./plugins/" + file);
     var mod = modules[file.replace(".js", "")];
-    if (mod.name !== null && mod.name !== undefined) {
-        if (mod.version !== null && mod.version !== undefined) {
-            logger.Info("Loaded " + mod.name + " module.");
-            mod.Info = logger.Info;
-            mod.Warning = logger.Warning;
-            mod.Error = logger.Error;
-            if (typeof mod.OnLoad === "function") {
-                mod.OnLoad();
-            }
+    if(mod.name !== null && mod.name !== undefined)
+    {
+      if(mod.version !== null && mod.version !== undefined)
+      {
+        logger.Info("Loaded " + mod.name + " module.");
+        mod.Info = logger.Info;
+        mod.Warning = logger.Warning;
+        mod.Error = logger.Error;
+        mod.Debug = logger.Debug;
+        if (typeof mod.OnLoad === "function")
+        {
+          mod.OnLoad();
         }
         else {
             logger.Error("Module " + file + " is missing a verion. Not loading module.");
