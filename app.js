@@ -144,7 +144,17 @@ let logic = function(input) {
 
 let TTS = function(text) {
     logger.Info(text)
-    cmd.run(`python ./speech.py "${text}"`);
+    cmd.get(`python3 ./speech.py "${text}"`,
+        function(err, data, stderr){
+            if (!err) {
+                if (process.env.os == "mac"){
+                    cmd.run('afplay speech.mp3')
+                }
+            } else {
+               console.log('error', err)
+            }
+ 
+        });
 }
 
 app.get('/:request', function(req, res) {

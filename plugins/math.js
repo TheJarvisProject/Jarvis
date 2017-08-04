@@ -111,6 +111,7 @@ module.exports = {
     data = data.replaceAll("cube", "", "^3");
     data = data.replaceAll("to the power of", "^");
     data = data.replaceAll("to power of", "^");
+    data = data.replaceAll(" x ", "*");
 
     response = math.eval(data);
 
