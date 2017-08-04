@@ -4,12 +4,14 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "alarm": "^2.0.0",
     "chalk": "^2.0.1",
     "dotenv": "^4.0.0",
     "fs": "^0.0.1-security",
     "mathjs": "^3.15.0",
     "node-wit": "^4.3.0",
-    "sync-request": "^4.1.0"
+    "sync-request": "^4.1.0",
+    "word2num": "^0.1.1"
   },
   "devDependencies": {},
   "scripts": {
