@@ -14,7 +14,20 @@ var normalizedPath = require("path").join(__dirname, "/plugins");
 let modules = {}
 
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
+
     modules[file.replace(".js", "")] = require("./plugins/" + file);
+    var mod = modules[file.replace(".js", "")];
+    if(mod.name !== null && mod.name !== undefined)
+    {
+      console.log("Loaded " + mod.name + " module.");
+      if (typeof mod.OnLoad === "function")
+      {
+        mod.OnLoad();
+      }
+    } else {
+      console.error("Module " + file + " is missing a name. Not loading module.");
+      delete(modules[file.replace(".js", "")]);
+    }
 });
 
 client.message('What will the temp be on friday', {})

@@ -1,5 +1,6 @@
 module.exports = {
     requirements: "[temperature, hot, cold, temp] {datetime}",
+    name: "Temperature",
     run: function(input, request) {
 
         let response = "I'm sorry but our magic gods of weather can only get 5 days in the future"
