@@ -11,6 +11,7 @@ brew install portaudio
 }
 
 pip install pyaudio
+pip install SpeechRecognition
 
 Setup your .env file
 
@@ -18,4 +19,5 @@ witapi=
 owmapi=
 owmlocation=City, State
 tempFormat=f (choose f, c, for leave blank for kelvin)
+port=3333
 
