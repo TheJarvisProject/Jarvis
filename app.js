@@ -2,6 +2,9 @@ require('dotenv').config()
 const request = require('sync-request');
 const chalk = require('chalk');
 const cmd = require('node-cmd');
+const express = require('express')
+const app = express()
+
 const {
     Wit,
     log
@@ -82,14 +85,6 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
     }
 });
 
-client.message('what the temp outside today', {})
-    .then((data) => {
-        logic(data);
-    })
-    .catch((err) => {
-        logger.Error(err.message);
-    });
-
 let logic = function(input) {
     logger.Info(JSON.stringify(input));
     let logicModule = false;
@@ -146,3 +141,18 @@ let TTS = function(text) {
     logger.Info(text)
     cmd.run(`python ./speech.py "${text}"`);
 }
+
+app.get('/:request', function(req, res) {
+    res.send("Pinged")
+    client.message(unescape(req.param('request')), {})
+        .then((data) => {
+            logic(data);
+        })
+        .catch((err) => {
+            logger.Error(err.message);
+        });
+})
+
+app.listen(process.env.port, function() {
+    logger.Info('Example app listening on port ' + process.env.port + '!')
+})

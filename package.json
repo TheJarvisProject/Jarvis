@@ -6,6 +6,7 @@
   "dependencies": {
     "chalk": "^2.0.1",
     "dotenv": "^4.0.0",
+    "express": "^4.15.3",
     "fs": "^0.0.1-security",
     "mathjs": "^3.15.0",
     "node-cmd": "^3.0.0",
