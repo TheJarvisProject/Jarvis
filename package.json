@@ -5,8 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "dotenv": "^4.0.0",
+    "fs": "^0.0.1-security",
     "node-wit": "^4.3.0",
-    "fs": "^0.0.1-security"
+    "sync-request": "^4.1.0"
   },
   "devDependencies": {},
   "scripts": {
