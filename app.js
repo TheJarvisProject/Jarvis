@@ -18,8 +18,7 @@ String.prototype.replaceAll = function(target, replacement, append = "") {
     var ret = this.split(target).join(replacement);
     if (ret !== this.toString()) {
         return ret + append;
-    }
-    else {
+    } else {
         return ret;
     }
 };
@@ -33,8 +32,7 @@ var logger = {
     Info: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log("[" + chalk.blue(this.name) + "] " + chalk.blue(message));
-        }
-        else {
+        } else {
             console.log("[" + chalk.blue("Jarvis") + "] " + chalk.blue(message));
         }
     },
@@ -42,24 +40,21 @@ var logger = {
     Warning: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log(chalk.bgYellow("[" + chalk.blue(this.name) + "] " + chalk.blue.bold(message)));
-        }
-        else {
+        } else {
             console.log(chalk.bgYellow("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold(message)));
         }
     },
     Error: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log(chalk.bgRed("[" + chalk.blue(this.name) + "] " + chalk.blue.bold.underline(message)));
-        }
-        else {
+        } else {
             console.log(chalk.bgRed("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold.underline(message)));
         }
     },
     Debug: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log(chalk.bgGreen("[" + chalk.blue(this.name) + "] " + chalk.blue(message)));
-        }
-        else {
+        } else {
             console.log(chalk.bgGreen("[" + chalk.blue("Jarvis") + "] " + chalk.blue(message)));
         }
     }
@@ -78,13 +73,11 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
             mod.Debug = logger.Debug;
             if (typeof mod.OnLoad === "function") {
                 mod.OnLoad();
-            }
-            else {
+            } else {
                 logger.Error("Module " + file + " is missing a verion. Not loading module.");
                 delete(modules[file.replace(".js", "")]);
             }
-        }
-        else {
+        } else {
             logger.Error("Module " + file + " is missing a name. Not loading module.");
             delete(modules[file.replace(".js", "")]);
         }
@@ -117,8 +110,7 @@ let logic = function(input) {
                         }
 
                     }
-                }
-                else {
+                } else {
                     for (var iii in tags) {
                         for (var iiii in requirements[1]) {
                             if (tags[iii] == requirements[1][iiii]) {
@@ -137,8 +129,7 @@ let logic = function(input) {
 
     if (logicModule != false) {
         TTS(logicModule.run(input, request))
-    }
-    else {
+    } else {
         TTS("Invalid Request");
     }
 }
@@ -146,31 +137,31 @@ let logic = function(input) {
 let TTS = function(text) {
     logger.Info(text)
     commandExists('python3')
-    .then(function(command){
-      cmd.get(`python3 ./speech.py "${text}"`,
-          function(err, data, stderr){
-              if (!err) {
-                  if (process.env.os == "mac"){
-                      cmd.run('afplay speech.mp3')
-                  }
-              } else {
-                 console.log('error', err)
-              }
+        .then(function(command) {
+            cmd.get(`python3 ./speech.py "${text}"`,
+                function(err, data, stderr) {
+                    if (!err) {
+                        if (process.env.os == "mac") {
+                            cmd.run('afplay speech.mp3')
+                        }
+                    } else {
+                        console.log('error', err)
+                    }
 
-          });
-    }).catch(function(){
-      cmd.get(`python ./speech.py "${text}"`,
-          function(err, data, stderr){
-              if (!err) {
-                  if (process.env.os == "mac"){
-                      cmd.run('afplay speech.mp3')
-                  }
-              } else {
-                 console.log('error', err)
-              }
+                });
+        }).catch(function() {
+            cmd.get(`python ./speech.py "${text}"`,
+                function(err, data, stderr) {
+                    if (!err) {
+                        if (process.env.os == "mac") {
+                            cmd.run('afplay speech.mp3')
+                        }
+                    } else {
+                        console.log('error', err)
+                    }
 
-          });
-    });
+                });
+        });
 }
 
 app.get('/:request', function(req, res) {
