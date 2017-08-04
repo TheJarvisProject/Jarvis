@@ -60,30 +60,6 @@ var logger = {
     }
 };
 
-require("fs").readdirSync(normalizedPath).forEach(function(file) {
-
-    modules[file.replace(".js", "")] = require("./plugins/" + file);
-    var mod = modules[file.replace(".js", "")];
-    if (mod.name !== null && mod.name !== undefined) {
-        if (mod.version !== null && mod.version !== undefined) {
-            logger.Info("Loaded " + mod.name + " module.");
-            mod.Info = logger.Info;
-            mod.Warning = logger.Warning;
-            mod.Error = logger.Error;
-            mod.Debug = logger.Debug;
-            if (typeof mod.OnLoad === "function") {
-                mod.OnLoad();
-            } else {
-                logger.Error("Module " + file + " is missing a verion. Not loading module.");
-                delete(modules[file.replace(".js", "")]);
-            }
-        } else {
-            logger.Error("Module " + file + " is missing a name. Not loading module.");
-            delete(modules[file.replace(".js", "")]);
-        }
-    }
-});
-
 let logic = function(input) {
     logger.Info(JSON.stringify(input));
     let logicModule = false;
@@ -128,13 +104,13 @@ let logic = function(input) {
     }
 
     if (logicModule != false) {
-        TTS(logicModule.run(input, request))
+        TTS(logicModule.run(input, request), logger)
     } else {
-        TTS("Invalid Request");
+        TTS("Invalid Request", logger);
     }
 }
 
-let TTS = function(text) {
+var TTS = function(text) {
     logger.Info(text)
     commandExists('python3')
         .then(function(command) {
@@ -178,3 +154,33 @@ app.get('/:request', function(req, res) {
 app.listen(process.env.port, function() {
     logger.Info('Example app listening on port ' + process.env.port + '!')
 })
+
+
+require("fs").readdirSync(normalizedPath).forEach(function(file) {
+
+    modules[file.replace(".js", "")] = require("./plugins/" + file);
+    var mod = modules[file.replace(".js", "")];
+    if (mod.name !== null && mod.name !== undefined) {
+        if (mod.version !== null && mod.version !== undefined) {
+            logger.Info("Loaded " + mod.name + " module.");
+            mod.Info = logger.Info;
+            mod.Warning = logger.Warning;
+            mod.Error = logger.Error;
+            mod.Debug = logger.Debug;
+
+            if (typeof mod.TTS === "function"){
+              TTS = mod.TTS
+              logger.Info("New TTS")
+            }
+            if (typeof mod.OnLoad === "function") {
+                mod.OnLoad();
+            } else {
+                logger.Error("Module " + file + " is missing a verion. Not loading module.");
+                delete(modules[file.replace(".js", "")]);
+            }
+        } else {
+            logger.Error("Module " + file + " is missing a name. Not loading module.");
+            delete(modules[file.replace(".js", "")]);
+        }
+    }
+});
