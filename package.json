@@ -1,0 +1,26 @@
+{
+  "name": "project-jarvis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "node-wit": "^4.3.0",
+    "sync-request": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/herohamp/project-jarvis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/herohamp/project-jarvis/issues"
+  },
+  "homepage": "https://github.com/herohamp/project-jarvis#readme"
+}
