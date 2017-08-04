@@ -113,9 +113,6 @@ module.exports = {
 
       response = math.eval(data);
 
-
-    response = math.eval(data);
-
     return response;
   }
 }

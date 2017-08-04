@@ -53,17 +53,16 @@ var logger = {
         else {
             console.log(chalk.bgRed("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold.underline(message)));
         }
-    }
-  },
-  Debug: function(message)
-  {
-    if(this.name !== null && this.name !== undefined)
+    },
+    Debug: function(message)
     {
-      console.log(chalk.bgGreen("["+chalk.blue(this.name)+"] " + chalk.blue(message)));
-    } else {
-      console.log(chalk.bgGreen("["+chalk.blue("Jarvis")+"] " + chalk.blue(message)));
+      if(this.name !== null && this.name !== undefined)
+      {
+        console.log(chalk.bgGreen("["+chalk.blue(this.name)+"] " + chalk.blue(message)));
+      } else {
+        console.log(chalk.bgGreen("["+chalk.blue("Jarvis")+"] " + chalk.blue(message)));
+      }
     }
-  }
 };
 
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
