@@ -14,7 +14,18 @@ module.exports = {
         const diff = date1.getTime() - date2.getTime();
         const Days = diff / (1000 * 60 * 60) / 24;
         if (Days == 0) {
-            response = `Todays temperature in ${process.env.owmlocation} is 85F`
+            const weatherData = JSON.parse(request('GET', `http://api.openweathermap.org/data/2.5/weather?q=${encodeURI(process.env.owmlocation)}&appid=${process.env.owmapi}`).getBody('utf8'));
+            let temp = weatherData.main.temp
+
+            if (process.env.tempFormat == "f") {
+                temp = Math.round(((temp - 273.15) * 1.8) + 32)
+            }
+
+            if (process.env.tempFormat == "c") {
+                temp = Math.round(temp - 273.15)
+            }
+
+            response = `Todays temperature in ${process.env.owmlocation} is ${temp} degrees`
         }
 
         if (Days > 0 && Days < 6) {
@@ -34,7 +45,7 @@ module.exports = {
                 temp = Math.round(temp - 273.15)
             }
 
-            response = `The temperature in ${Days} ${days} will be ${temp} degrees`
+            response = `The temperature in ${process.env.owmlocation} in ${Days} ${days} will be ${temp} degrees`
         }
 
         return response;

@@ -17,7 +17,7 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
     modules[file.replace(".js", "")] = require("./plugins/" + file);
 });
 
-client.message('What will the temp be tomorrow', {})
+client.message('What will the temp be on friday', {})
     .then((data) => {
         logic(data);
     })
