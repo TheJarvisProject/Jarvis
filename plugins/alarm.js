@@ -1,6 +1,5 @@
 module.exports = {
   requirements: "[set, alarm, remind, buzzer, alert] {datetime}",
-  //plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent
   name: "Alarm.js",
   version: "0.1.0",
   OnLoad: function() {
@@ -12,9 +11,20 @@ module.exports = {
     var response = "Sorry, I didn't get that.";
 
     var grabDate = input.entities.datetime[0].value;
-    grabDate = grabDate.replaceAll("T", "-");
+    /*grabDate = grabDate.replaceAll("T", "-");
     grabDate = grabDate.split("-");
-    console.log(grabDate);
+    var time = grabDate[3].split(":");
+    var date = {
+      year: grabDate[0],
+      month: grabDate[1],
+      day: grabDate[2],
+      hour: time[0],
+      minute: time[1],
+      second: time[2]
+    }*/
+    var theDate = new Date(grabDate);
+    //console.log(date);
+    console.log(theDate);
     return response;
   }
 }

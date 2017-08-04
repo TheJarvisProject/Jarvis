@@ -2,8 +2,9 @@ require('dotenv').config()
 const request = require('sync-request');
 const chalk = require('chalk');
 const cmd = require('node-cmd');
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+var commandExists = require('command-exists');
 
 const {
     Wit,
@@ -144,17 +145,32 @@ let logic = function(input) {
 
 let TTS = function(text) {
     logger.Info(text)
-    cmd.get(`python3 ./speech.py "${text}"`,
-        function(err, data, stderr){
-            if (!err) {
-                if (process.env.os == "mac"){
-                    cmd.run('afplay speech.mp3')
-                }
-            } else {
-               console.log('error', err)
-            }
- 
-        });
+    commandExists('python3')
+    .then(function(command){
+      cmd.get(`python3 ./speech.py "${text}"`,
+          function(err, data, stderr){
+              if (!err) {
+                  if (process.env.os == "mac"){
+                      cmd.run('afplay speech.mp3')
+                  }
+              } else {
+                 console.log('error', err)
+              }
+
+          });
+    }).catch(function(){
+      cmd.get(`python ./speech.py "${text}"`,
+          function(err, data, stderr){
+              if (!err) {
+                  if (process.env.os == "mac"){
+                      cmd.run('afplay speech.mp3')
+                  }
+              } else {
+                 console.log('error', err)
+              }
+
+          });
+    });
 }
 
 app.get('/:request', function(req, res) {

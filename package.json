@@ -6,6 +6,7 @@
   "dependencies": {
     "alarm": "^2.0.0",
     "chalk": "^2.0.1",
+    "command-exists": "^1.2.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
     "fs": "^0.0.1-security",
