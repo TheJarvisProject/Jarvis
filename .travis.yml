@@ -5,3 +5,5 @@ env:
   - witapi=JMUXKDWYGWSM52QGQFKCMC3GRBZHEDTL owmapi=dfbc0e40d5bba03ccd062773c632780b owmlocation=New York tempFormat=f port=3333 os=mac
 install:
   - npm install
+script:
+  - npm start
