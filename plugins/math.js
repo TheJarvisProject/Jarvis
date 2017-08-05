@@ -8,7 +8,7 @@ module.exports = {
     },
 
     run: function(input, request) {
-        var math = require('mathjs');
+        const math = require('mathjs');
 
         const Small = {
             zero: 0,
@@ -84,12 +84,12 @@ module.exports = {
 
         module.exports = word2num
 
-        var response = "Sorry, I didn't get that.";
+        let response = "Sorry, I didn't get that.";
 
-        var data = input.entities.math_expression[0].value;
+        let data = input.entities.math_expression[0].value;
 
         data = data.split(" ");
-        var retData = "";
+        let retData = "";
         for (i in data) {
             retData += word2num(data[i]) + " ";
         }

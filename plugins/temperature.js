@@ -21,22 +21,26 @@ module.exports = {
         const Days = diff / (1000 * 60 * 60) / 24;
         if (Days == 0) {
             const weatherData = JSON.parse(request('GET', `http://api.openweathermap.org/data/2.5/weather?q=${encodeURI(process.env.owmlocation)}&appid=${process.env.owmapi}`).getBody('utf8'));
-            let temp = weatherData.main.temp
+            let tempmin = weatherData.list[(((Days - 1) * 8) + 4)].main.temp_min
+            let tempmax = weatherData.list[(((Days - 1) * 8) + 4)].main.temp_max
 
             if (process.env.tempFormat == "f") {
-                temp = Math.round(((temp - 273.15) * 1.8) + 32)
+                tempmax = Math.round(((tempmax - 273.15) * 1.8) + 32)
+                tempmax = Math.round(((tempmax - 273.15) * 1.8) + 32)
             }
 
             if (process.env.tempFormat == "c") {
-                temp = Math.round(temp - 273.15)
+                tempmin = Math.round(tempmin - 273.15)
+                tempmax = Math.round(tempmax - 273.15)
             }
 
-            response = `Todays temperature in ${process.env.owmlocation} is ${temp} degrees`
+            response = `Todays temperature in ${process.env.owmlocation} will be a min of ${tempmin} degrees and a max of ${tempmax} degrees`
         }
 
         if (Days > 0 && Days < 6) {
             const weatherData = JSON.parse(request('GET', `http://api.openweathermap.org/data/2.5/forecast?q=${encodeURI(process.env.owmlocation)}&appid=${process.env.owmapi}`).getBody('utf8'));
-            let temp = weatherData.list[(((Days - 1) * 8) + 4)].main.temp
+            let tempmin = weatherData.list[(((Days - 1) * 8) + 4)].main.temp_min
+            let tempmax = weatherData.list[(((Days - 1) * 8) + 4)].main.temp_max
             let days = "day"
 
             if (Days > 1) {
@@ -44,14 +48,16 @@ module.exports = {
             }
 
             if (process.env.tempFormat == "f") {
-                temp = Math.round(((temp - 273.15) * 1.8) + 32)
+                tempmax = Math.round(((tempmax - 273.15) * 1.8) + 32)
+                tempmax = Math.round(((tempmax - 273.15) * 1.8) + 32)
             }
 
             if (process.env.tempFormat == "c") {
-                temp = Math.round(temp - 273.15)
+                tempmin = Math.round(tempmin - 273.15)
+                tempmax = Math.round(tempmax - 273.15)
             }
 
-            response = `The temperature in ${process.env.owmlocation} in ${Days} ${days} will be ${temp} degrees`
+            response = `The temperature in ${process.env.owmlocation} in ${Days} ${days} will be a min of ${tempmin} degrees and a max of ${tempmax} degrees`
         }
 
         return response;

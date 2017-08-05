@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const cmd = require('node-cmd');
 const express = require('express');
 const app = express();
-var commandExists = require('command-exists');
+const commandExists = require('command-exists');
 
 const {
     Wit,
@@ -15,7 +15,7 @@ const client = new Wit({
 });
 
 String.prototype.replaceAll = function(target, replacement, append = "") {
-    var ret = this.split(target).join(replacement);
+    let ret = this.split(target).join(replacement);
     if (ret !== this.toString()) {
         return ret + append;
     } else {
@@ -23,12 +23,11 @@ String.prototype.replaceAll = function(target, replacement, append = "") {
     }
 };
 
-var normalizedPath = require("path").join(__dirname, "/plugins");
-
+const normalizedPath = require("path").join(__dirname, "/plugins");
 
 let modules = {}
 
-var logger = {
+const logger = {
     Info: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log("[" + chalk.blue(this.name) + "] " + chalk.blue(message));
@@ -155,7 +154,6 @@ app.listen(process.env.port, function() {
     logger.Info('Example app listening on port ' + process.env.port + '!')
 })
 
-
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
 
     modules[file.replace(".js", "")] = require("./plugins/" + file);
@@ -168,9 +166,9 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
             mod.Error = logger.Error;
             mod.Debug = logger.Debug;
 
-            if (typeof mod.TTS === "function"){
-              TTS = mod.TTS
-              logger.Info("New TTS")
+            if (typeof mod.TTS === "function") {
+                TTS = mod.TTS
+                logger.Info("New TTS")
             }
             if (typeof mod.OnLoad === "function") {
                 mod.OnLoad();
