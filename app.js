@@ -183,6 +183,6 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
     }
 });
 
-if (process.env.Travis == true){
+if (process.env.Travis){
   process.exit()
 }
