@@ -19,7 +19,10 @@ def listen():
         # instead of `r.recognize_google(audio)`
         text=r.recognize_google(audio)
         print("Google Speech Recognition thinks you said " + text)
-        requests.get("http://localhost:3333/" + text)
+
+        if text.startswith('Jarvis'):
+            requests.get("http://localhost:3333/" + text)
+            print("Pinged Server")
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
