@@ -47,17 +47,25 @@ module.exports = {
                 days = "days"
             }
 
+            var unit = "Kelvin";
+
             if (process.env.tempFormat == "f") {
+                tempmin = Math.round(((tempmin - 273.15) * 1.8) + 32)
                 tempmax = Math.round(((tempmax - 273.15) * 1.8) + 32)
-                tempmax = Math.round(((tempmax - 273.15) * 1.8) + 32)
+                var finaltemp = tempmin + tempmax;
+                finaltemp = finaltemp/2;
+                unit = "Fahrenheit";
             }
 
             if (process.env.tempFormat == "c") {
                 tempmin = Math.round(tempmin - 273.15)
                 tempmax = Math.round(tempmax - 273.15)
+                var finaltemp = tempmin + tempmax;
+                finaltemp = finaltemp/2;
+                unit = "Celsius";
             }
 
-            response = `The temperature in ${process.env.owmlocation} in ${Days} ${days} will be a min of ${tempmin} degrees and a max of ${tempmax} degrees`
+            response = `The temperature in ${process.env.owmlocation} in ${Days} ${days} will be ${finaltemp} degrees ${unit}`
         }
 
         return response;
