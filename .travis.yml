@@ -2,9 +2,11 @@ language: node_js
 node_js:
   - 7
 env:
-- witapi=JMUXKDWYGWSM52QGQFKCMC3GRBZHEDTL
-- owmapi=dfbc0e40d5bba03ccd062773c632780b
-- owmlocation=Damascus, Maryland
-- tempFormat=f
-- port=3333
-- os=mac
+  - witapi=JMUXKDWYGWSM52QGQFKCMC3GRBZHEDTL
+  - owmapi=dfbc0e40d5bba03ccd062773c632780b
+  - owmlocation=Damascus, Maryland
+  - tempFormat=f
+  - port=3333
+  - os=mac
+install:
+  - npm install

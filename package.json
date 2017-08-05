@@ -29,5 +29,6 @@
   "bugs": {
     "url": "https://github.com/herohamp/project-jarvis/issues"
   },
-  "homepage": "https://github.com/herohamp/project-jarvis#readme"
-}
+  "homepage": "https://github.com/herohamp/project-jarvis#readme",
+
+  "scripts": { "start" : "node app.js" } }
