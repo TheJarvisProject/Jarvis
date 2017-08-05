@@ -90,7 +90,7 @@ module.exports = {
         data = data.split(" ");
         var retData = "";
         for (i in data) {
-          retData += word2num(data[i]) + " ";
+            retData += word2num(data[i]) + " ";
         }
         data = retData;
         data = data.replaceAll("plus", "+");
