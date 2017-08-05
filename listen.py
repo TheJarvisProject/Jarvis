@@ -10,8 +10,6 @@ def listen():
     with sr.Microphone() as source:
         print("Say something!")
         audio = r.listen(source)
-
-
     # recognize speech using Google Speech Recognition
     try:
         # for testing purposes, we're just using the default API key
@@ -20,8 +18,9 @@ def listen():
         text=r.recognize_google(audio)
         print("Google Speech Recognition thinks you said " + text)
 
-        if text.startswith('Jarvis'):
-            requests.get("http://localhost:3333/" + text)
+        if "Jarvis" in text:
+            text=" "+text
+            requests.get("http://localhost:3333/" + text.split("Jarvis",1)[1])
             print("Pinged Server")
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand audio")
