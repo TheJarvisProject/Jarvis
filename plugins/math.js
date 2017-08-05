@@ -1,6 +1,5 @@
 module.exports = {
-    requirements: "[*] {math_expression}",
-    //plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent
+    requirements: "[plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent] {math_expression}",
     name: "Math.js",
     version: "0.1.0",
     OnLoad: function() {
@@ -89,9 +88,9 @@ module.exports = {
         let data = input.entities.math_expression[0].value;
 
         data = data.split(" ");
-        let retData = "";
+        var retData = "";
         for (i in data) {
-            retData += word2num(data[i]) + " ";
+          retData += word2num(data[i]) + " ";
         }
         data = retData;
         data = data.replaceAll("plus", "+");
@@ -108,7 +107,13 @@ module.exports = {
         data = data.replaceAll("cube", "", "^3");
         data = data.replaceAll("to the power of", "^");
         data = data.replaceAll("to power of", "^");
-        data = data.replaceAll(" x ", "*");
+        data = data.replaceAll("x", "*");
+        data = data.replaceAll("cosine of", "cos(", ")");
+        data = data.replaceAll("cosine", "cos(", ")");
+        data = data.replaceAll("sine of", "sin(", ")");
+        data = data.replaceAll("sine", "sin(", ")");
+        data = data.replaceAll("tangent of", "tan", ")");
+        data = data.replaceAll("tangent", "tan(", ")");
 
         response = math.eval(data);
 

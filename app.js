@@ -5,6 +5,8 @@ const cmd = require('node-cmd');
 const express = require('express');
 const app = express();
 const commandExists = require('command-exists');
+const fs = require("fs");
+const jsonStringify = require('json-pretty');
 
 const {
     Wit,
@@ -25,7 +27,53 @@ String.prototype.replaceAll = function(target, replacement, append = "") {
 
 const normalizedPath = require("path").join(__dirname, "/plugins");
 
-let modules = {}
+let modules = {};
+
+var Config = {
+  getDataFolder: function()
+  {
+    return "./plugins/" + this.name + "/";
+  },
+
+  createConfig: function()
+  {
+    if(fs.existsSync(this.getDataFolder()))
+    {
+      return;
+    } else {
+      fs.mkdirSync(this.getDataFolder());
+    }
+  },
+
+  addConfig: function(name, def)
+  {
+    if(fs.existsSync(this.getDataFolder() + name + ".json")) {
+      return;
+    } else {
+      var fd = fs.openSync(this.getDataFolder() + this.name + ".json", 'w');
+      if(def === null && def === undefined) {
+        def = {};
+      }
+      fs.writeFile(this.getDataFolder() + this.name + ".json", jsonStringify(def), function(err) {
+        if(err) {
+            return console.log(err);
+        }
+
+        return;
+      });
+    }
+  },
+
+  getConfigValue: function(name)
+  {
+    if(fs.existsSync(this.getDataFolder() + this.name + ".json")) {
+      var file = require(this.getDataFolder() + this.name + ".json");
+      return file[name];
+    } else {
+      return;
+    }
+  }
+}
 
 const logger = {
     Info: function(message) {
@@ -39,15 +87,21 @@ const logger = {
     Warning: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log(chalk.bgYellow("[" + chalk.blue(this.name) + "] " + chalk.blue.bold(message)));
-        } else {
+            TTS(this.name + " says Warning, "+message);
+        }
+        else {
             console.log(chalk.bgYellow("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold(message)));
+            TTS("Jarvis says Warning, "+message);
         }
     },
     Error: function(message) {
         if (this.name !== null && this.name !== undefined) {
             console.log(chalk.bgRed("[" + chalk.blue(this.name) + "] " + chalk.blue.bold.underline(message)));
-        } else {
+            TTS(this.name + " says Error, "+message);
+        }
+        else {
             console.log(chalk.bgRed("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold.underline(message)));
+            TTS("Jarvis says Error, "+message);
         }
     },
     Debug: function(message) {
@@ -78,9 +132,13 @@ let logic = function(input) {
                     if (requirements[0][ii] == inputSplits[i]) {
                         for (var iii in tags) {
                             for (var iiii in requirements[1]) {
+                              if (tags[iii] !== "*") {
                                 if (tags[iii] == requirements[1][iiii]) {
                                     metRequirement = true;
                                 }
+                              } else {
+                                metRequirement = true;
+                              }
                             }
                         }
 
@@ -88,9 +146,13 @@ let logic = function(input) {
                 } else {
                     for (var iii in tags) {
                         for (var iiii in requirements[1]) {
+                          if (tags[iii] !== "*") {
                             if (tags[iii] == requirements[1][iiii]) {
                                 metRequirement = true;
                             }
+                          } else {
+                            metRequirement = true;
+                          }
                         }
                     }
                 }
@@ -155,31 +217,38 @@ app.listen(process.env.port, function() {
 })
 
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
+    if(fs.statSync(normalizedPath + "/" + file).isDirectory()) {
 
-    modules[file.replace(".js", "")] = require("./plugins/" + file);
-    var mod = modules[file.replace(".js", "")];
-    if (mod.name !== null && mod.name !== undefined) {
-        if (mod.version !== null && mod.version !== undefined) {
-            logger.Info("Loaded " + mod.name + " module.");
-            mod.Info = logger.Info;
-            mod.Warning = logger.Warning;
-            mod.Error = logger.Error;
-            mod.Debug = logger.Debug;
+    } else {
+      modules[file.replace(".js", "")] = require("./plugins/" + file);
+      var mod = modules[file.replace(".js", "")];
+      if (mod.name !== null && mod.name !== undefined) {
+          if (mod.version !== null && mod.version !== undefined) {
+              logger.Info("Loaded " + mod.name + " module.");
+              mod.Info = logger.Info;
+              mod.Warning = logger.Warning;
+              mod.Error = logger.Error;
+              mod.Debug = logger.Debug;
+              mod.addConfig = Config.addConfig;
+              mod.createConfig = Config.createConfig;
+              mod.getDataFolder = Config.getDataFolder;
+              mod.getConfigValue = Config.getConfigValue;
 
-            if (typeof mod.TTS === "function") {
-                TTS = mod.TTS
-                logger.Info("New TTS")
-            }
-            if (typeof mod.OnLoad === "function") {
-                mod.OnLoad();
-            } else {
-                logger.Error("Module " + file + " is missing a verion. Not loading module.");
-                delete(modules[file.replace(".js", "")]);
-            }
-        } else {
-            logger.Error("Module " + file + " is missing a name. Not loading module.");
-            delete(modules[file.replace(".js", "")]);
-        }
+              if (typeof mod.TTS === "function") {
+                  TTS = mod.TTS
+                  logger.Info("New TTS")
+              }
+              if (typeof mod.OnLoad === "function") {
+                  mod.OnLoad();
+              } else {
+                  logger.Error("Module " + file + " is missing a verion. Not loading module.");
+                  delete(modules[file.replace(".js", "")]);
+              }
+          } else {
+              logger.Error("Module " + file + " is missing a name. Not loading module.");
+              delete(modules[file.replace(".js", "")]);
+          }
+      }
     }
 });
 
