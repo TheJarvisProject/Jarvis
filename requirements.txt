@@ -1,2 +1,2 @@
-gTTS>=0.0
-requests>0.0
+gTTS>=1.2.1
+SpeechRecognition>=3.7.1
