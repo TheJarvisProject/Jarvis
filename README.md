@@ -8,9 +8,7 @@ npm install
 pip install -r requirements.txt
 
 IF ON MAC {
-
 brew install portaudio
-
 }
 
 pip install pyaudio
