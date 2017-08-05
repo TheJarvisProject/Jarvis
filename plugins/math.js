@@ -81,18 +81,30 @@ module.exports = {
             return n + g
         }
 
-        module.exports = word2num
+        module.exports = word2num;
 
         let response = "Sorry, I didn't get that.";
 
         let data = input.entities.math_expression[0].value;
-
+        data = data.replaceAll("the", "");
+        data = data.toLowerCase();
         data = data.split(" ");
         var retData = "";
         for (i in data) {
             retData += word2num(data[i]) + " ";
         }
+
         data = retData;
+        data = data.replaceAll("one", "1");
+        data = data.replaceAll("two", "2");
+        data = data.replaceAll("three", "3");
+        data = data.replaceAll("four", "4");
+        data = data.replaceAll("five", "5");
+        data = data.replaceAll("six", "6");
+        data = data.replaceAll("seven", "7");
+        data = data.replaceAll("eight", "8");
+        data = data.replaceAll("nine", "9");
+        data = data.replaceAll("zero", "0");
         data = data.replaceAll("plus", "+");
         data = data.replaceAll("added to", "+");
         data = data.replaceAll("minus", "-");

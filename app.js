@@ -160,7 +160,7 @@ let logic = function(input) {
     if (logicModule != false) {
         TTS(logicModule.run(input, request), logger, cmd, process)
     } else {
-        TTS("Invalid Request", logger, cmd, process);
+        TTS("I am sorrry, but I don't understand that.", logger, cmd, process);
     }
 }
 
