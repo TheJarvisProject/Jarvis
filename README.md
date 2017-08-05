@@ -8,11 +8,10 @@ npm install
 
 pip install -r requirements.txt
 
-IF ON LINUX { \
+if(User.os.Linux) { \
   sudo apt-get install portaudio19-dev python-all-dev python3-all-dev \
-}
-IF ON MAC { \
-brew install portaudio \
+} else if(User.os.Mac) { \
+  brew install portaudio \
 }
 
 pip install pyaudio
