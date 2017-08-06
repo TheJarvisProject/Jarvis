@@ -1,10 +1,10 @@
 module.exports = {
-  requirements: "[plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent] {math_expression}",
-  name: "Math.js",
-  version: "0.1.0",
-  OnLoad: function() {
-    this.Info(this.name + " " + this.version + " loaded!");
-  },
+    requirements: "[plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent] {math_expression}",
+    name: "Math.js",
+    version: "0.6.0",
+    OnLoad: function() {
+        this.Info(this.name + " " + this.version + " loaded!");
+    },
 
   run: function(input, request) {
     const math = require('mathjs');

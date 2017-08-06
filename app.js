@@ -7,6 +7,24 @@ const app = express();
 const commandExists = require('command-exists');
 const fs = require("fs");
 const jsonStringify = require('json-pretty');
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+var ask = function() {
+  rl.question('> ', (answer) => {
+    client.message(unescape(answer), {})
+        .then((data) => {
+            logic(data);
+        })
+        .catch((err) => {
+            logger.Error(err.message);
+        });
+  });
+}
 
 const {
   Wit,
@@ -204,6 +222,8 @@ app.get('/:request', function(req, res) {
       logger.Error(err.message);
     });
 })
+
+ask();
 
 app.listen(process.env.port, function() {
   logger.Info('Example app listening on port ' + process.env.port + '!')
