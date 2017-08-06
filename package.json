@@ -16,6 +16,7 @@
     "node-cmd": "^3.0.0",
     "node-wit": "^4.3.0",
     "sync-request": "^4.1.0",
+    "weekday": "^3.0.1",
     "word2num": "^0.1.1",
     "youtube-search": "^1.0.10"
   },

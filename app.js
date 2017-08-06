@@ -7,6 +7,24 @@ const app = express();
 const commandExists = require('command-exists');
 const fs = require("fs");
 const jsonStringify = require('json-pretty');
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+var ask = function() {
+  rl.question('> ', (answer) => {
+    client.message(unescape(answer), {})
+        .then((data) => {
+            logic(data);
+        })
+        .catch((err) => {
+            logger.Error(err.message);
+        });
+  });
+}
 
 const {
     Wit,
@@ -92,9 +110,11 @@ const logger = {
         if (this.name !== null && this.name !== undefined) {
             console.log(chalk.bgRed("[" + chalk.blue(this.name) + "] " + chalk.blue.bold.underline(message)));
             TTS(this.name + " says Error, " + message);
+            ask();
         } else {
             console.log(chalk.bgRed("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold.underline(message)));
             TTS("Jarvis says Error, " + message);
+            ask();
         }
     },
     Debug: function(message) {
@@ -158,9 +178,11 @@ let logic = function(input) {
     }
 
     if (logicModule != false) {
-        TTS(logicModule.run(input, request), logger, cmd, process)
+        TTS(logicModule.run(input, request), logger, cmd, process);
+        ask();
     } else {
         TTS("I am sorrry, but I don't understand that.", logger, cmd, process);
+        ask();
     }
 }
 
@@ -204,6 +226,8 @@ app.get('/:request', function(req, res) {
             logger.Error(err.message);
         });
 })
+
+ask();
 
 app.listen(process.env.port, function() {
     logger.Info('Example app listening on port ' + process.env.port + '!')
