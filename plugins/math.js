@@ -3,10 +3,12 @@ module.exports = {
     name: "Math.js",
     version: "0.6.0",
     OnLoad: function() {
-        this.Info(this.name + " " + this.version + " loaded!");
+      const logger = require("../core/Logger.js");
+      logger.registerLogger(this.name);
+      logger.Info(this.name + " " + this.version + " loaded!");
     },
 
-  run: function(input, request) {
+  run: function(input, request, resolve, reject) {
     const math = require('mathjs');
 
     const Small = {
@@ -129,6 +131,6 @@ module.exports = {
 
     response = math.eval(data);
 
-    return response;
+    resolve(response);
   }
 }
