@@ -9,6 +9,9 @@ const fs = require("fs");
 const jsonStringify = require('json-pretty');
 const readline = require('readline');
 const logger = require("./core/Logger.js");
+const googleTTS = require('google-tts-api');
+const http = require('http');
+const https = require('https');
 
 logger.registerLogger("Jarvis");
 
@@ -159,8 +162,27 @@ var getLogic = function(logicModule, input, request)
 }
 
 var TTS = function(text) {
-  logger.Info(text)
-  commandExists('python3')
+  text = text.toString();
+  logger.Info(text);
+  googleTTS(text, 'en', 1)
+  .then(function (url) {
+    var file = fs.createWriteStream("./speech.mp3");
+    var request = https.get(url, function(response) {
+      response.pipe(file);
+      file.on('finish', function() {
+        file.close();
+      });
+      if (process.env.os == "mac") {
+        cmd.run('afplay speech.mp3')
+      }
+    }).on('error', function(err) { // Handle errors
+      logger.Error(err);
+    });
+  })
+  .catch(function (err) {
+    logger.Error(err.stack);
+  });
+  /*commandExists('python3')
     .then(function(command) {
       cmd.get(`python3 ./speech.py "${text}"`,
         function(err, data, stderr) {
@@ -185,7 +207,7 @@ var TTS = function(text) {
           }
 
         });
-    });
+    });*/
 }
 
 app.get('/:request', function(req, res) {

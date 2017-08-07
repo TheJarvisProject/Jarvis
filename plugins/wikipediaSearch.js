@@ -15,9 +15,15 @@ module.exports = {
       get =get.replace(/search/i,"");
       get = get.replace(/for/,"");
 
-      const wiki = require('wikijs').default;
-      wiki().page(get)
-      .then(page => page.summary())
-      .then(resolve);
+      var wtf_wikipedia = require("wtf_wikipedia");
+      wtf_wikipedia.from_api(get, "en", function(markup){
+        var obj= wtf_wikipedia.parse(markup);
+        var intro = obj.sections[0].sentences;
+        var ret = "";
+        for(j in intro) {
+          ret += intro[j].text;
+        }
+        resolve(ret);
+      })
     }
 }
