@@ -8,6 +8,9 @@ const commandExists = require('command-exists');
 const fs = require("fs");
 const jsonStringify = require('json-pretty');
 const readline = require('readline');
+const logger = require("./core/Logger.js");
+
+logger.registerLogger("Jarvis");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -88,42 +91,6 @@ var Config = {
   }
 }
 
-const logger = {
-  Info: function(message) {
-    if (this.name !== null && this.name !== undefined) {
-      console.log("[" + chalk.blue(this.name) + "] " + chalk.blue(message));
-    } else {
-      console.log("[" + chalk.blue("Jarvis") + "] " + chalk.blue(message));
-    }
-  },
-
-  Warning: function(message) {
-    if (this.name !== null && this.name !== undefined) {
-      console.log(chalk.bgYellow("[" + chalk.blue(this.name) + "] " + chalk.blue.bold(message)));
-      TTS(this.name + " says Warning, " + message);
-    } else {
-      console.log(chalk.bgYellow("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold(message)));
-      TTS("Jarvis says Warning, " + message);
-    }
-  },
-  Error: function(message) {
-    if (this.name !== null && this.name !== undefined) {
-      console.log(chalk.bgRed("[" + chalk.blue(this.name) + "] " + chalk.blue.bold.underline(message)));
-      TTS(this.name + " says Error, " + message);
-    } else {
-      console.log(chalk.bgRed("[" + chalk.blue("Jarvis") + "] " + chalk.blue.bold.underline(message)));
-      TTS("Jarvis says Error, " + message);
-    }
-  },
-  Debug: function(message) {
-    if (this.name !== null && this.name !== undefined) {
-      console.log(chalk.bgGreen("[" + chalk.blue(this.name) + "] " + chalk.blue(message)));
-    } else {
-      console.log(chalk.bgGreen("[" + chalk.blue("Jarvis") + "] " + chalk.blue(message)));
-    }
-  }
-};
-
 let logic = function(input) {
   logger.Info(JSON.stringify(input));
   let logicModule = false;
@@ -176,10 +143,19 @@ let logic = function(input) {
   }
 
   if (logicModule != false) {
-    TTS(logicModule.run(input, request), logger, cmd, process)
+    getLogic(logicModule, input, request).then(data => TTS(data, logger, cmd, process));
+    ask();
   } else {
     TTS("I am sorrry, but I don't understand that.", logger, cmd, process);
+    ask();
   }
+}
+
+var getLogic = function(logicModule, input, request)
+{
+  return new Promise(function (resolve, reject) {
+    logicModule.run(input, request, resolve, reject);
+  });
 }
 
 var TTS = function(text) {
@@ -238,18 +214,10 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
     if (mod.name !== null && mod.name !== undefined) {
       if (mod.version !== null && mod.version !== undefined) {
         logger.Info("Loaded " + mod.name + " module.");
-        mod.Info = logger.Info;
-        mod.Warning = logger.Warning;
-        mod.Error = logger.Error;
-        mod.Debug = logger.Debug;
-        mod.addConfig = Config.addConfig;
-        mod.createConfig = Config.createConfig;
-        mod.getDataFolder = Config.getDataFolder;
-        mod.getConfigValue = Config.getConfigValue;
 
         if (typeof mod.TTS === "function") {
-          TTS = mod.TTS
-          logger.Info("New TTS")
+          TTS = mod.TTS;
+          logger.Info("New TTS");
         }
         if (typeof mod.OnLoad === "function") {
           mod.OnLoad();

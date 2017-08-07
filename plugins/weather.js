@@ -3,10 +3,12 @@ module.exports = {
     name: "Weather",
     version: "0.5.0",
     OnLoad: function() {
-        this.Info(this.name + " " + this.version + " loaded!");
+      const logger = require("../core/Logger.js");
+      logger.registerLogger(this.name);
+      logger.Info(this.name + " " + this.version + " loaded!");
     },
 
-    run: function(input, request) {
+    run: function(input, request, resolve, reject) {
         var weekday = require('weekday');
 
         let response = "I'm sorry but our magic gods of weather can only get 5 days in the future";
@@ -46,13 +48,12 @@ module.exports = {
                 unit = "Celsius";
             }
 
-            response = `Today will have a high of ${tempmax}, a low of ${tempmin} degrees, and ${humidity}% humidity. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
+            response = `Today will have a high of ${tempmax}, a low of ${tempmin}, and ${humidity}% humidity. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
         }
 
         if (Days > 0 && Days < 6) {
             const weatherData = JSON.parse(request('GET', `http://api.openweathermap.org/data/2.5/forecast?q=${encodeURI(process.env.owmlocation)}&appid=${process.env.owmapi}`).getBody('utf8'));
             let tempmin = weatherData.list[day].main.temp_min;
-            this.Debug(JSON.stringify(weatherData.list[day].main));
             let tempmax = weatherData.list[day].main.temp_max;
             let conditions = weatherData.list[day].weather.description;
             if(conditions = "clear sky") {
@@ -89,6 +90,6 @@ module.exports = {
             response = `On ${theDay} the high will be ${tempmax}, the low will be ${tempmin}, and the humidity will be ${humidity}%. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
         }
 
-        return response;
+        resolve(response);
     }
 }

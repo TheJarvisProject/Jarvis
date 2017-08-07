@@ -3,14 +3,16 @@ module.exports = {
   name: "YoutubePlay",
   version: "0.1.0",
   OnLoad: function() {
-    this.Info(this.name + " " + this.version + " loaded!");
-    this.createConfig();
+    const logger = require("../core/Logger.js");
+    logger.registerLogger(this.name);
+    logger.Info(this.name + " " + this.version + " loaded!");
+    /*this.createConfig();
     this.addConfig("plugin", {
       key: "YOURKEY"
-    });
-  },
+    });*/
+  }
 
-  run: function(input, request) {
+  /*run: function(input, request) {
     var search = require('youtube-search');
 
     var opts = {
@@ -29,5 +31,5 @@ module.exports = {
     });
 
     return val;
-  }
+  }*/
 }

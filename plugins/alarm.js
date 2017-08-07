@@ -3,10 +3,12 @@ module.exports = {
   name: "Alarm.js",
   version: "0.1.0",
   OnLoad: function() {
-    this.Info(this.name + " " + this.version + " loaded! Sound the alarms!");
+    const logger = require("../core/Logger.js");
+    logger.registerLogger(this.name);
+    logger.Info(this.name + " " + this.version + " loaded! Sound the alarms!");
   },
 
-  run: function(input, request) {
+  run: function(input, request, resolve, reject) {
     var alarm = require('alarm');
     var response = "Sorry, I didn't get that.";
 
@@ -25,6 +27,6 @@ module.exports = {
     var theDate = new Date(grabDate);
     //console.log(date);
     console.log(theDate);
-    return response;
+    resolve(response);
   }
 }
