@@ -9,14 +9,12 @@ const commandExists = require('command-exists');
 const fs = require("fs");
 const jsonStringify = require('json-pretty');
 const readline = require('readline');
-const logger = require("./core/Logger.js");
+const Logger = require("./core/Logger.js");
+const logger = new Logger("Jarvis");
 const googleTTS = require('google-tts-api');
 const http = require('http');
 const https = require('https');
 // End Requirements
-
-//Register this "module" with the logger.
-logger.registerLogger("Jarvis");
 
 //Setup a readline interface for the ask function
 const rl = readline.createInterface({
@@ -52,9 +50,11 @@ const client = new Wit({
 
 /**
 * Replaces all instances of specified string with a replacment. If you add a third param it will also append that string to the end of whatever it replaces.
+* @class String
+* @function replaceAll
 * @param {string} target - The string you want to replace.
 * @param {string} replacment - What to replace the target string with.
-* @param {string} append - (Optional) what to append after the string that was replaced. Default value is nothing.
+* @param {string} [append] - what to append after the string that was replaced. Default value is nothing.
 * @returns {string} Returns the modified string;
 */
 String.prototype.replaceAll = function(target, replacement, append = "") {
@@ -73,6 +73,7 @@ let modules = {};
 
 /**
 * @todo Move this to its own file.
+* @class Config
 * @deprecated Until further notice.
 */
 var Config = {
@@ -118,6 +119,7 @@ var Config = {
 
 /**
 * Oh boy this is gonna be fun. logic is the core Jarvis function. It runs all the necessary checks before calling a specific module.
+* @function logic
 * @param {string} input - What you want Jarvis to parse.
 * @example
 * logic("weather today"); // Jarvis will call the weather module for this and return the weather conditions for today.

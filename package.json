@@ -28,7 +28,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "generate-docs": "jsdoc ./ -r -c ./jsdoc.json"
   },
   "repository": {
     "type": "git",
