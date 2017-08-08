@@ -206,100 +206,106 @@ var getLogic = function(logicModule, input, request)
   });
 }
 
+/**
+* This function will convert text in speech (Text To Speech).
+* @function TTS
+* @param {string} text - The text to convert into a string.
+* @requires module:core/Logger
+*/
 var TTS = function(text) {
+  // Make sure text is in a string format.
   text = text.toString();
+  // Log it for debugging.
   logger.Info(text);
+  // Call the googleTTS promise. 'en' is the language (english) and 1 is the speed.
   googleTTS(text, 'en', 1)
+  // Url is the url returned by googleTTS. It is for downloading the speech.mp3 file.
   .then(function (url) {
+    // Open a new write stream to speech.mp3.
     var file = fs.createWriteStream("./speech.mp3");
+    // Download the mp3 file.
     var request = https.get(url, function(response) {
+      // Pipe the file response to speech.mp3.
       response.pipe(file);
+      // Close the write stream once we are done.
       file.on('finish', function() {
         file.close();
       });
+      // If we are on a mac.
       if (process.env.os == "mac") {
+        // Play the speech file.
         cmd.run('afplay speech.mp3')
       }
-    }).on('error', function(err) { // Handle errors
-      logger.Error(err);
+    }).on('error', function(err) { // Handle errors.
+      logger.Error(err.stack);
     });
   })
-  .catch(function (err) {
+  .catch(function (err) { // Handle errors.
     logger.Error(err.stack);
   });
-  /*commandExists('python3')
-    .then(function(command) {
-      cmd.get(`python3 ./speech.py "${text}"`,
-        function(err, data, stderr) {
-          if (!err) {
-            if (process.env.os == "mac") {
-              cmd.run('afplay speech.mp3')
-            }
-          } else {
-            console.log('error', err)
-          }
-
-        });
-    }).catch(function() {
-      cmd.get(`python ./speech.py "${text}"`,
-        function(err, data, stderr) {
-          if (!err) {
-            if (process.env.os == "mac") {
-              cmd.run('afplay speech.mp3')
-            }
-          } else {
-            console.log('error', err)
-          }
-
-        });
-    });*/
 }
 
+// Local webserver for listen.py (I WANT IT GONE SO BAD!).
 app.get('/:request', function(req, res) {
   res.send("Pinged")
+  // Send input to Wit.ai
   client.message(unescape(req.param('request')), {})
     .then((data) => {
+      // Send what we get from Wit to the logic function.
       logic(data);
     })
-    .catch((err) => {
-      logger.Error(err.message);
+    .catch((err) => { // Handle errors.
+      logger.Error(err.stack);
     });
 })
 
+// First ask
 ask();
 
+// Start the webserver.
 app.listen(process.env.port, function() {
   logger.Info('Example app listening on port ' + process.env.port + '!')
 })
 
+// Module Loading. Get the name of all files and folders in the normalizedPath.
 require("fs").readdirSync(normalizedPath).forEach(function(file) {
+  // If file variable is a folder, do nothing.
   if (fs.statSync(normalizedPath + "/" + file).isDirectory()) {
 
   } else {
+    // Add the module to the modules array.
     modules[file.replace(".js", "")] = require("./plugins/" + file);
+    // Helper variable to make subsequent stuff easier. Its just a reference to the mod we are currently loading.
     var mod = modules[file.replace(".js", "")];
+    // If this mod doesn't have a name, error out.
     if (mod.name !== null && mod.name !== undefined) {
+      // If this mod doesn't have a version, error out.
       if (mod.version !== null && mod.version !== undefined) {
         logger.Info("Loaded " + mod.name + " module.");
 
+        // If this mod has a TTS function, set our current TTS function to it.
         if (typeof mod.TTS === "function") {
           TTS = mod.TTS;
           logger.Info("New TTS");
         }
+        // If this mod has an OnLoad function, call it.
         if (typeof mod.OnLoad === "function") {
           mod.OnLoad();
-        } else {
-          logger.Error("Module " + file + " is missing a verion. Not loading module.");
-          delete(modules[file.replace(".js", "")]);
         }
       } else {
-        logger.Error("Module " + file + " is missing a name. Not loading module.");
+        logger.Error("Module " + file + " is missing a verion. Not loading module.");
+        // Remove mod from modules array.
         delete(modules[file.replace(".js", "")]);
       }
+    } else {
+      logger.Error("Module " + file + " is missing a name. Not loading module.");
+      // Remove mod from modules array.
+      delete(modules[file.replace(".js", "")]);
     }
   }
 });
 
+// If this is Travis, stop.
 if (process.env.Travis) {
   process.exit()
 }
