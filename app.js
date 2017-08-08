@@ -128,8 +128,11 @@ var Config = {
 * logic("weather today"); // Jarvis will call the weather module for this and return the weather conditions for today.
 */
 let logic = function(input) {
+  // Output whatever input is in a JSON format.
   logger.Info(JSON.stringify(input));
+  // Default to false.
   let logicModule = false;
+  // Initialize an array.
   let tags = []
 
   for (i in input.entities) {
@@ -187,6 +190,15 @@ let logic = function(input) {
   }
 }
 
+/**
+* The function that actually runs a module's `run` function. THIS IS FOR INTERNAL USE ONLY! USE THE {@link logic} FUNCTION INSTEAD!
+* @private
+* @function getLogic
+* @param {Object} logicModule - The export from the module. Each module is `require()`ed therefore this accepts an object.
+* @param {string} input - The input string from {@link logic}. This is passed to the module for processing.
+* @param {Object} request - The sync-request module.
+* @returns {Promise} This is a new promise. The module will either reject or resolve the promise. This allows the module to decide when to return a value.
+*/
 var getLogic = function(logicModule, input, request)
 {
   return new Promise(function (resolve, reject) {

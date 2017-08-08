@@ -26,10 +26,12 @@
     "wtf_wikipedia": "^1.0.1",
     "youtube-search": "^1.0.10"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tui-jsdoc-template": "^1.2.2"
+  },
   "scripts": {
     "start": "node app.js",
-    "generate-docs": "rm -R ./out; jsdoc ./ -r -c ./jsdoc.json"
+    "generate-docs": "rm -R ./out; jsdoc ./ -r -p -c ./jsdoc.json"
   },
   "repository": {
     "type": "git",
