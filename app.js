@@ -24,6 +24,8 @@ const rl = readline.createInterface({
 
 /**
 * The ask function is used for debugging. It will have Jarvis parse anything you type in the console.
+* @example
+* ask();
 */
 var ask = function() {
   rl.question('> ', (answer) => {
@@ -118,9 +120,10 @@ var Config = {
 }
 
 /**
-* Oh boy this is gonna be fun. logic is the core Jarvis function. It runs all the necessary checks before calling a specific module.
+* Oh boy this is gonna be fun. logic is the core Jarvis function. It runs all the necessary checks before calling a specific module. This requires {@link module:core/Logger}.
 * @function logic
 * @param {string} input - What you want Jarvis to parse.
+* @requires module:core/Logger
 * @example
 * logic("weather today"); // Jarvis will call the weather module for this and return the weather conditions for today.
 */

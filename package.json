@@ -29,7 +29,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "node app.js",
-    "generate-docs": "jsdoc ./ -r -c ./jsdoc.json"
+    "generate-docs": "rm -R ./out; jsdoc ./ -r -c ./jsdoc.json"
   },
   "repository": {
     "type": "git",
