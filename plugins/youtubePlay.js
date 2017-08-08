@@ -5,7 +5,7 @@ module.exports = {
   OnLoad: function() {
     const Logger = require("../core/Logger.js");
     const logger = new Logger(this.name);
-    
+
     logger.Info(this.name + " " + this.version + " loaded!");
     /*this.createConfig();
     this.addConfig("plugin", {
