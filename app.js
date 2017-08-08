@@ -46,10 +46,12 @@ const {
 } = require('node-wit');
 
 // Set our access token to what we have in the .env file.
-const client = new Wit({
-  accessToken: process.env.witapi
-});
 
+if (!process.env.Travis) {
+  const client = new Wit({
+    accessToken: process.env.witapi
+  });
+}
 /**
  * Replaces all instances of specified string with a replacment. If you add a third param it will also append that string to the end of whatever it replaces.
  * @class String
