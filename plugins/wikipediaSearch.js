@@ -3,8 +3,9 @@ module.exports = {
     name: "WikipediaSearch.js",
     version: "0.1.0",
     OnLoad: function() {
-      const logger = require("../core/Logger.js");
-      logger.registerLogger(this.name);
+      const Logger = require("../core/Logger.js");
+      const logger = new Logger(this.name);
+      
       logger.Info(this.name + " " + this.version + " loaded!");
     },
 

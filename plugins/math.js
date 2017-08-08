@@ -3,8 +3,9 @@ module.exports = {
     name: "Math.js",
     version: "0.6.0",
     OnLoad: function() {
-      const logger = require("../core/Logger.js");
-      logger.registerLogger(this.name);
+      const Logger = require("../core/Logger.js");
+      const logger = new Logger(this.name);
+      
       logger.Info(this.name + " " + this.version + " loaded!");
     },
 

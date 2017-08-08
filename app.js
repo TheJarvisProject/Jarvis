@@ -1,3 +1,4 @@
+// Requirements
 require('dotenv').config()
 const request = require('sync-request');
 const chalk = require('chalk');
@@ -8,18 +9,24 @@ const commandExists = require('command-exists');
 const fs = require("fs");
 const jsonStringify = require('json-pretty');
 const readline = require('readline');
-const logger = require("./core/Logger.js");
+const Logger = require("./core/Logger.js");
+const logger = new Logger("Jarvis");
 const googleTTS = require('google-tts-api');
 const http = require('http');
 const https = require('https');
+// End Requirements
 
-logger.registerLogger("Jarvis");
-
+//Setup a readline interface for the ask function
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
+/**
+* The ask function is used for debugging. It will have Jarvis parse anything you type in the console.
+* @example
+* ask();
+*/
 var ask = function() {
   rl.question('> ', (answer) => {
     client.message(unescape(answer), {})
@@ -32,14 +39,26 @@ var ask = function() {
   });
 }
 
+// Require Wit.ai stuff
 const {
   Wit,
   log
 } = require('node-wit');
+
+// Set our access token to what we have in the .env file.
 const client = new Wit({
   accessToken: process.env.witapi
 });
 
+/**
+* Replaces all instances of specified string with a replacment. If you add a third param it will also append that string to the end of whatever it replaces.
+* @class String
+* @function replaceAll
+* @param {string} target - The string you want to replace.
+* @param {string} replacment - What to replace the target string with.
+* @param {string} [append] - what to append after the string that was replaced. Default value is nothing.
+* @returns {string} Returns the modified string;
+*/
 String.prototype.replaceAll = function(target, replacement, append = "") {
   let ret = this.split(target).join(replacement);
   if (ret !== this.toString()) {
@@ -49,10 +68,16 @@ String.prototype.replaceAll = function(target, replacement, append = "") {
   }
 };
 
+// Set a global path to use for plugins.
 const normalizedPath = require("path").join(__dirname, "/plugins");
 
 let modules = {};
 
+/**
+* @todo Move this to its own file.
+* @class Config
+* @deprecated Until further notice.
+*/
 var Config = {
   getDataFolder: function() {
     return "./plugins/" + this.name + "/";
@@ -94,6 +119,14 @@ var Config = {
   }
 }
 
+/**
+* Oh boy this is gonna be fun. logic is the core Jarvis function. It runs all the necessary checks before calling a specific module. This requires {@link module:core/Logger}.
+* @function logic
+* @param {string} input - What you want Jarvis to parse.
+* @requires module:core/Logger
+* @example
+* logic("weather today"); // Jarvis will call the weather module for this and return the weather conditions for today.
+*/
 let logic = function(input) {
   logger.Info(JSON.stringify(input));
   let logicModule = false;
