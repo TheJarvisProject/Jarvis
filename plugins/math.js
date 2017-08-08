@@ -1,13 +1,13 @@
 module.exports = {
-    requirements: "[plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent] {math_expression}",
-    name: "Math.js",
-    version: "0.6.0",
-    OnLoad: function() {
-      const Logger = require("../core/Logger.js");
-      const logger = new Logger(this.name);
-      
-      logger.Info(this.name + " " + this.version + " loaded!");
-    },
+  requirements: "[plus, minus, times, divide, divided, multiply, add, subtract, +, -, *, x, /, sqrt, square, cube, cubed, squared, power, base, log, sin, sine, cos, cosine, tan, tangent] {math_expression}",
+  name: "Math.js",
+  version: "0.6.0",
+  OnLoad: function() {
+    const Logger = require("../core/Logger.js");
+    const logger = new Logger(this.name);
+
+    logger.Info(this.name + " " + this.version + " loaded!");
+  },
 
   run: function(input, request, resolve, reject) {
     const math = require('mathjs');

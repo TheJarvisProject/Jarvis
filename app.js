@@ -23,19 +23,19 @@ const rl = readline.createInterface({
 });
 
 /**
-* The ask function is used for debugging. It will have Jarvis parse anything you type in the console.
-* @example
-* ask();
-*/
+ * The ask function is used for debugging. It will have Jarvis parse anything you type in the console.
+ * @example
+ * ask();
+ */
 var ask = function() {
   rl.question('> ', (answer) => {
     client.message(unescape(answer), {})
-        .then((data) => {
-            logic(data);
-        })
-        .catch((err) => {
-            logger.Error(err.message);
-        });
+      .then((data) => {
+        logic(data);
+      })
+      .catch((err) => {
+        logger.Error(err.message);
+      });
   });
 }
 
@@ -51,14 +51,14 @@ const client = new Wit({
 });
 
 /**
-* Replaces all instances of specified string with a replacment. If you add a third param it will also append that string to the end of whatever it replaces.
-* @class String
-* @function replaceAll
-* @param {string} target - The string you want to replace.
-* @param {string} replacment - What to replace the target string with.
-* @param {string} [append] - what to append after the string that was replaced. Default value is nothing.
-* @returns {string} Returns the modified string;
-*/
+ * Replaces all instances of specified string with a replacment. If you add a third param it will also append that string to the end of whatever it replaces.
+ * @class String
+ * @function replaceAll
+ * @param {string} target - The string you want to replace.
+ * @param {string} replacment - What to replace the target string with.
+ * @param {string} [append] - what to append after the string that was replaced. Default value is nothing.
+ * @returns {string} Returns the modified string;
+ */
 String.prototype.replaceAll = function(target, replacement, append = "") {
   let ret = this.split(target).join(replacement);
   if (ret !== this.toString()) {
@@ -74,10 +74,10 @@ const normalizedPath = require("path").join(__dirname, "/plugins");
 let modules = {};
 
 /**
-* @todo Move this to its own file.
-* @class Config
-* @deprecated Until further notice.
-*/
+ * @todo Move this to its own file.
+ * @class Config
+ * @deprecated Until further notice.
+ */
 var Config = {
   getDataFolder: function() {
     return "./plugins/" + this.name + "/";
@@ -120,13 +120,13 @@ var Config = {
 }
 
 /**
-* Oh boy this is gonna be fun. logic is the core Jarvis function. It runs all the necessary checks before calling a specific module. This requires {@link module:core/Logger}.
-* @function logic
-* @param {string} input - What you want Jarvis to parse.
-* @requires module:core/Logger
-* @example
-* logic("weather today"); // Jarvis will call the weather module for this and return the weather conditions for today.
-*/
+ * Oh boy this is gonna be fun. logic is the core Jarvis function. It runs all the necessary checks before calling a specific module. This requires {@link module:core/Logger}.
+ * @function logic
+ * @param {string} input - What you want Jarvis to parse.
+ * @requires module:core/Logger
+ * @example
+ * logic("weather today"); // Jarvis will call the weather module for this and return the weather conditions for today.
+ */
 let logic = function(input) {
   // Output whatever input is in a JSON format.
   logger.Info(JSON.stringify(input));
@@ -151,23 +151,26 @@ let logic = function(input) {
               for (var iiii in requirements[1]) {
                 if (tags[iii] !== "*") {
                   if (tags[iii] == requirements[1][iiii]) {
+                    // If the tag requirements and the word requirements are meet
                     metRequirement = true;
                   }
                 } else {
+                  // Wildcard
                   metRequirement = true;
                 }
               }
             }
-
           }
         } else {
           for (var iii in tags) {
             for (var iiii in requirements[1]) {
               if (tags[iii] !== "*") {
                 if (tags[iii] == requirements[1][iiii]) {
+                  // If wildcard word and requirements are meet
                   metRequirement = true;
                 }
               } else {
+                // Wildcard
                 metRequirement = true;
               }
             }
@@ -191,17 +194,16 @@ let logic = function(input) {
 }
 
 /**
-* The function that actually runs a module's `run` function. THIS IS FOR INTERNAL USE ONLY! USE THE {@link logic} FUNCTION INSTEAD!
-* @private
-* @function getLogic
-* @param {Object} logicModule - The export from the module. Each module is `require()`ed therefore this accepts an object.
-* @param {string} input - The input string from {@link logic}. This is passed to the module for processing.
-* @param {Object} request - The sync-request module.
-* @returns {Promise} This is a new promise. The module will either reject or resolve the promise. This allows the module to decide when to return a value.
-*/
-var getLogic = function(logicModule, input, request)
-{
-  return new Promise(function (resolve, reject) {
+ * The function that actually runs a module's `run` function. THIS IS FOR INTERNAL USE ONLY! USE THE {@link logic} FUNCTION INSTEAD!
+ * @private
+ * @function getLogic
+ * @param {Object} logicModule - The export from the module. Each module is `require()`ed therefore this accepts an object.
+ * @param {string} input - The input string from {@link logic}. This is passed to the module for processing.
+ * @param {Object} request - The sync-request module.
+ * @returns {Promise} This is a new promise. The module will either reject or resolve the promise. This allows the module to decide when to return a value.
+ */
+var getLogic = function(logicModule, input, request) {
+  return new Promise(function(resolve, reject) {
     logicModule.run(input, request, resolve, reject);
   });
 }
@@ -219,6 +221,7 @@ var TTS = function(text) {
   logger.Info(text);
   // Call the googleTTS promise. 'en' is the language (english) and 1 is the speed.
   googleTTS(text, 'en', 1)
+<<<<<<< HEAD
   // Url is the url returned by googleTTS. It is for downloading the speech.mp3 file.
   .then(function (url) {
     // Open a new write stream to speech.mp3.
@@ -243,6 +246,25 @@ var TTS = function(text) {
   .catch(function (err) { // Handle errors.
     logger.Error(err.stack);
   });
+=======
+    .then(function(url) {
+      var file = fs.createWriteStream("./speech.mp3");
+      var request = https.get(url, function(response) {
+        response.pipe(file);
+        file.on('finish', function() {
+          file.close();
+        });
+        if (process.env.os == "mac") {
+          cmd.run('afplay speech.mp3')
+        }
+      }).on('error', function(err) { // Handle errors
+        logger.Error(err);
+      });
+    })
+    .catch(function(err) {
+      logger.Error(err.stack);
+    });
+>>>>>>> herohamp/master
 }
 
 // Local webserver for listen.py (I WANT IT GONE SO BAD!).
