@@ -221,7 +221,6 @@ var TTS = function(text) {
   logger.Info(text);
   // Call the googleTTS promise. 'en' is the language (english) and 1 is the speed.
   googleTTS(text, 'en', 1)
-<<<<<<< HEAD
   // Url is the url returned by googleTTS. It is for downloading the speech.mp3 file.
   .then(function (url) {
     // Open a new write stream to speech.mp3.
@@ -246,25 +245,6 @@ var TTS = function(text) {
   .catch(function (err) { // Handle errors.
     logger.Error(err.stack);
   });
-=======
-    .then(function(url) {
-      var file = fs.createWriteStream("./speech.mp3");
-      var request = https.get(url, function(response) {
-        response.pipe(file);
-        file.on('finish', function() {
-          file.close();
-        });
-        if (process.env.os == "mac") {
-          cmd.run('afplay speech.mp3')
-        }
-      }).on('error', function(err) { // Handle errors
-        logger.Error(err);
-      });
-    })
-    .catch(function(err) {
-      logger.Error(err.stack);
-    });
->>>>>>> herohamp/master
 }
 
 // Local webserver for listen.py (I WANT IT GONE SO BAD!).
