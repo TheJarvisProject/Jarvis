@@ -211,11 +211,11 @@ var getLogic = function(logicModule, input, request) {
 }
 
 /**
-* This function will convert text in speech (Text To Speech).
-* @function TTS
-* @param {string} text - The text to convert into a string.
-* @requires module:core/Logger
-*/
+ * This function will convert text in speech (Text To Speech).
+ * @function TTS
+ * @param {string} text - The text to convert into a string.
+ * @requires module:core/Logger
+ */
 var TTS = function(text) {
   // Make sure text is in a string format.
   text = text.toString();
@@ -223,30 +223,30 @@ var TTS = function(text) {
   logger.Info(text);
   // Call the googleTTS promise. 'en' is the language (english) and 1 is the speed.
   googleTTS(text, 'en', 1)
-  // Url is the url returned by googleTTS. It is for downloading the speech.mp3 file.
-  .then(function (url) {
-    // Open a new write stream to speech.mp3.
-    var file = fs.createWriteStream("./speech.mp3");
-    // Download the mp3 file.
-    var request = https.get(url, function(response) {
-      // Pipe the file response to speech.mp3.
-      response.pipe(file);
-      // Close the write stream once we are done.
-      file.on('finish', function() {
-        file.close();
+    // Url is the url returned by googleTTS. It is for downloading the speech.mp3 file.
+    .then(function(url) {
+      // Open a new write stream to speech.mp3.
+      var file = fs.createWriteStream("./speech.mp3");
+      // Download the mp3 file.
+      var request = https.get(url, function(response) {
+        // Pipe the file response to speech.mp3.
+        response.pipe(file);
+        // Close the write stream once we are done.
+        file.on('finish', function() {
+          file.close();
+        });
+        // If we are on a mac.
+        if (process.env.os == "mac") {
+          // Play the speech file.
+          cmd.run('afplay speech.mp3')
+        }
+      }).on('error', function(err) { // Handle errors.
+        logger.Error(err.stack);
       });
-      // If we are on a mac.
-      if (process.env.os == "mac") {
-        // Play the speech file.
-        cmd.run('afplay speech.mp3')
-      }
-    }).on('error', function(err) { // Handle errors.
+    })
+    .catch(function(err) { // Handle errors.
       logger.Error(err.stack);
     });
-  })
-  .catch(function (err) { // Handle errors.
-    logger.Error(err.stack);
-  });
 }
 
 // Local webserver for listen.py (I WANT IT GONE SO BAD!).

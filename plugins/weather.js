@@ -49,7 +49,7 @@ module.exports = {
         unit = "Celsius";
       }
 
-      response = `Today will have a high of ${tempmax}, a low of ${tempmin}, and ${humidity}% humidity. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
+      response = `Today will have a high of ${tempmax} degrees, a low of ${tempmin} degrees, and ${humidity}% humidity. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
     }
 
     if (Days > 0 && Days < 6) {
@@ -88,7 +88,7 @@ module.exports = {
       let today = weekday();
       let todayNumber = weekday(today);
       let theDay = weekday(todayNumber + 1 + Days);
-      response = `On ${theDay} the high will be ${tempmax}, the low will be ${tempmin}, and the humidity will be ${humidity}%. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
+      response = `On ${theDay} the high will be ${tempmax} degrees, the low will be ${tempmin} degrees, and the humidity will be ${humidity}%. Conditions will be ${conditions} with ${cloudCover}% cloud cover.`;
     }
 
     resolve(response);
