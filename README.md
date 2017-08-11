@@ -1,4 +1,3 @@
-![Travis Ci](https://api.travis-ci.com/herohamp/Jarvis.svg?token=aT9sSqBTCFCReC6gY2oD&branch=master)
 # Project Jarvis
 A personal assistant made to be fully modular
 
