@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - 7
-env:
-  - port=3333 os=mac Travis=true
-install:
-  - npm install
-script:
-  - npm start

@@ -1,32 +1,32 @@
 {
-  "plugins": [],
-  "recurseDepth": 10,
-  "source": {
-    "exclude": ["./node_modules", "./.git", "./out"],
-    "includePattern": ".+\\.js(doc|x)?$",
-    "excludePattern": "(^|\\/|\\\\)_"
-  },
-  "sourceType": "module",
-  "tags": {
-    "allowUnknownTags": true,
-    "dictionaries": ["jsdoc", "closure"]
-  },
-  "templates": {
-    "cleverLinks": false,
-    "monospaceLinks": false
-  },
-  "opts": {
-    "template": "node_modules/tui-jsdoc-template",
-    "name": "Jarvis - Personal Assistant",
-    "useCollapsibles": true,
-    "logo": {
-      "url": "https://avatars2.githubusercontent.com/u/30729266?v=4&s=200",
-      "width": "200px",
-      "height": "200px",
-      "link": "https://github.com/TheJarvisProject"
+    "plugins": [],
+    "recurseDepth": 10,
+    "source": {
+        "exclude": ["./node_modules", "./.git", "./out"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
     },
-    "footerText": "Jarvis - Copyright Hampton M. and Austin H. 2017.",
-    "recursive": true,
-    "verbose": true
-  }
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": {
+      "template": "node_modules/tui-jsdoc-template",
+      "name": "Jarvis - Personal Assistant",
+      "useCollapsibles": true,
+      "logo": {
+        "url": "https://avatars2.githubusercontent.com/u/30729266?v=4&s=200",
+        "width": "200px",
+        "height": "200px",
+        "link": "https://github.com/TheJarvisProject"
+      },
+      "footerText": "Jarvis - Copyright Hampton M. and Austin H. 2017.",
+      "recursive": true,
+      "verbose": true
+    }
 }
