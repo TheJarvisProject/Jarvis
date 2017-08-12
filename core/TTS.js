@@ -8,6 +8,13 @@ module.exports = function(text) {
   const cmd = require('node-cmd');
   require('dotenv').config()
 
+
+  if (process.env.TTS != undefined) {
+    require('./'+process.env.TTS)(text);
+    return;
+  }
+
+
   // Make sure text is in a string format.
   text = text.toString();
   // Log it for debugging.

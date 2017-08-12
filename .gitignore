@@ -2,3 +2,4 @@
 node_modules/*
 speech.mp3
 out/*
+core/cv*
