@@ -4,7 +4,9 @@ const request = require('sync-request');
 const chalk = require('chalk');
 const cmd = require('node-cmd');
 const express = require('express');
+const path = require('path');
 const app = express();
+const ip = require("ip");
 const commandExists = require('command-exists');
 const fs = require("fs");
 const jsonStringify = require('json-pretty');
@@ -215,10 +217,19 @@ var getLogic = function(logicModule, input, request) {
 * @requires module:core/Logger
 */
 
+app.get('/', function(req, res) {
+    res.send(fs.readFileSync(paths.join(__dirname + '/index.html')).toString().replace("localhost",ip.address()));
+});
+
 // Local webserver for listen.py (I WANT IT GONE SO BAD!).
 app.get('/:request', function(req, res) {
   res.send("Pinged")
   // Send input to Wit.ai
+
+  if (unescape(req.param('request')) == "favicon.ico"){
+    return false;
+  }
+
   client.message(unescape(req.param('request')), {})
     .then((data) => {
       // Send what we get from Wit to the logic function.
@@ -252,7 +263,7 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
       // If this mod doesn't have a version, error out.
       if (mod.version !== null && mod.version !== undefined) {
         logger.Info("Loaded " + mod.name + " module.");
-        
+
         // If this mod has an OnLoad function, call it.
         if (typeof mod.OnLoad === "function") {
           mod.OnLoad();
@@ -269,6 +280,8 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
     }
   }
 });
+
+logger.Info("Local IP "+ip.address())
 
 // If this is Travis, stop.
 if (process.env.Travis) {

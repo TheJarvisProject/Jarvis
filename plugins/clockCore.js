@@ -76,7 +76,7 @@ module.exports = {
 
   },
 
-  run: function(input, request, resolve, reject) {
-
+  run: function() {
+    this.data = require("./clockCore/data.json")
   }
 }
