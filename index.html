@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Jarvis Voice Detector</title>
+  </head>
+  <body>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+
+    <script>
+        function httpGetAsync(theUrl, callback) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    callback(xmlHttp.responseText);
+            }
+            xmlHttp.open("GET", theUrl, true); // true for asynchronous
+            xmlHttp.send(null);
+        }
+
+
+        if (annyang) {
+            // Let's define a command.
+            var commands = {
+                'Jarvis *message': found,
+                'Javis *message': found,
+                'javis *message': found,
+                'jarvis *message': found
+            };
+
+            function found(message) {
+                document.write(message + "<br>")
+                httpGetAsync("http://localhost:3333/" + message, function() {})
+            }
+
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+
+            annyang.debug(function(msg) {
+                console.log(msg)
+            });
+
+            // Start listening.
+            annyang.start();
+        }
+    </script>
+
+  </body>
+</html>
